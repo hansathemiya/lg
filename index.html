@@ -155,46 +155,16 @@
             gap: 50px;
             align-items: center;
         }
-        .video-wrapper {
+        .video-placeholder {
+            background: linear-gradient(135deg, var(--primary) 0%, #1e3a5f 100%);
             border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(10, 37, 64, 0.2);
-            background: #000;
-            position: relative;
-            aspect-ratio: 16/9;
-            max-height: 350px;
-        }
-        .video-wrapper video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: none;
-        }
-        .video-wrapper img.loading {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-        .play-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
+            height: 350px;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            opacity: 1;
-            transition: opacity 0.3s;
-        }
-        .play-overlay:hover {
-            opacity: 0.8;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(10, 37, 64, 0.2);
         }
         .play-btn {
             width: 80px;
@@ -204,7 +174,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
             z-index: 2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .play-btn:hover {
+            transform: scale(1.1);
         }
         .play-btn i {
             color: var(--primary);
@@ -406,32 +382,6 @@
             margin-right: 15px;
             object-fit: cover;
         }
-        /* Who Needs This Section */
-        .who-needs {
-            background: linear-gradient(135deg, #f0f4ff 0%, #f8f9ff 100%);
-            padding: 80px 0;
-        }
-        .business-cases {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        .case-card {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 5px 20px rgba(10, 37, 64, 0.08);
-        }
-        .case-card h3 {
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 12px;
-        }
-        .case-card p {
-            color: var(--gray);
-            margin-bottom: 15px;
-        }
         /* Offer Sections */
         .offer {
             background: linear-gradient(135deg, #f0f4ff 0%, #f8f9ff 100%);
@@ -581,7 +531,7 @@
         .ps-section .highlight {
             color: var(--secondary);
         }
-        /* Modal */
+        /* MODAL - Glass Card Style */
         .modal {
             display: none;
             position: fixed;
@@ -589,31 +539,48 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(10, 37, 64, 0.9);
+            background: rgba(10, 37, 64, 0.8);
+            backdrop-filter: blur(5px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
         .modal-content {
-            background: white;
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(10, 37, 64, 0.2);
             width: 100%;
             max-width: 500px;
             padding: 40px;
             position: relative;
             animation: modalOpen 0.4s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         @keyframes modalOpen {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
         .close-modal {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--gray);
+            background: rgba(255, 255, 255, 0.8);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--primary);
         }
         .form-group {
             margin-bottom: 20px;
@@ -626,10 +593,17 @@
         .form-control {
             width: 100%;
             padding: 15px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 10px;
             font-family: 'Poppins', sans-serif;
             font-size: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            transition: border-color 0.2s ease;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(0, 255, 157, 0.1);
         }
         /* Responsive */
         @media (max-width: 992px) {
@@ -639,7 +613,7 @@
             .intrigue-grid {
                 grid-template-columns: 1fr;
             }
-            .video-wrapper {
+            .video-placeholder {
                 order: -1;
             }
         }
@@ -662,6 +636,9 @@
             }
             .offer-box {
                 padding: 40px 20px;
+            }
+            .modal-content {
+                padding: 30px 20px;
             }
         }
         @media (max-width: 576px) {
@@ -710,13 +687,9 @@
                         <a href="#solution" class="btn">See How It Works</a>
                     </div>
                 </div>
-                <div class="video-wrapper">
-                    <img src="/loading.apng" alt="Loading" class="loading">
-                    <video id="promo-video" src="/vid.mp4" preload="metadata"></video>
-                    <div class="play-overlay" id="play-overlay">
-                        <div class="play-btn">
-                            <i class="fas fa-play"></i>
-                        </div>
+                <div class="video-placeholder">
+                    <div class="play-btn">
+                        <i class="fas fa-play"></i>
                     </div>
                 </div>
             </div>
@@ -919,37 +892,7 @@
                     </div>
                 </div>
             </div>
-            <div style="text-align: center; margin-top: 40px;">
-                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNDAgNDgiPjxnIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+PHBhdGggZD0iTTQ4IDI0YzAgMTMuMjU1LTEwLjc0NSAyNC0yNCAyNFMwIDM3LjI1NSAwIDI0IDEwLjc0NSAwIDI0IDBzMjQgMTAuNzQ1IDI0IDI0em0yNCAwYzAgMTMuMjU1IDEwLjc0NSAyNCAyNCAyNHMyNC0xMC43NDUgMjQtMjQtMTAuNzQ1LTI0LTI0LTI0LTI0IDEwLjc0NS0yNCAyNHptNDggMGMwIDEzLjI1NSAxMC43NDUgMjQgMjQgMjRzMjQtMTAuNzQ1IDI0LTI0LTEwLjc0NS0yNC0yNC0yNC0yNCAxMC43NDUtMjQgMjR6bTQ4IDBjMCAxMy4yNTUgMTAuNzQ1IDI0IDI0IDI0czI0LTEwLjc0NSAyNC0yNC0xMC43NDUtMjQtMjQtMjQtMjQgMTAuNzQ1LTI0IDI0eiIgZmlsbD0iI2QwZDBlMCIgZmlsbC1vcGFjaXR5PSIuNSIvPjxwYXRoIGQ9Ik0xNDQgMjRjMCA2LjYyNy01LjM3MyAxMi0xMiAxMi02LjYyOCAwLTEyLTUuMzczLTEyLTEyczUuMzcyLTEyIDEyLTEyYzYuNjI3IDAgMTIgNS4zNzMgMTIgMTJ6bTQ4IDBjMCA2LjYyNy01LjM3MyAxMi0xMiAxMnMtMTItNS4zNzMtMTItMTIgNS4zNzMtMTIgMTItMTIgMTIgNS4zNzMgMTIgMTJ6bTQ4IDBjMCA2LjYyNy01LjM3MyAxMi0xMiAxMi02LjYyOCAwLTEyLTUuMzczLTEyLTEyczUuMzcyLTEyIDEyLTEyYzYuNjI3IDAgMTIgNS4zNzMgMTIgMTJ6bTQ4IDBjMCA2LjYyNy01LjM3MyAxMi0xMiAxMnMtMTItNS4zNzMtMTItMTIgNS4zNzMtMTIgMTItMTIgMTIgNS4zNzMgMTIgMTJ6IiBmaWxsPSIjZmZjMTA3Ii8+PC9nPjwvc3ZnPg==" alt="Trust Badges" style="max-width: 400px; margin: 0 auto; display: block;">
-            </div>
-        </div>
-    </section>
-    <!-- Who Needs This Section -->
-    <section class="who-needs">
-        <div class="container">
-            <div class="section-title">
-                <h2>Who Needs This?</h2>
-            </div>
-            <div class="business-cases">
-                <div class="case-card">
-                    <h3>Local Restaurant Owner</h3>
-                    <p>Spends on Facebook ads but only gets likes—not reservations or orders.</p>
-                    <p><strong>Solution:</strong> A targeted funnel offering a “Free Dessert” opt-in.</p>
-                    <p><strong>Result:</strong> 320 new leads in 2 weeks, $8,400 in additional monthly revenue.</p>
-                </div>
-                <div class="case-card">
-                    <h3>Fitness Studio</h3>
-                    <p>Relies on walk-ins and word-of-mouth; struggles to scale membership.</p>
-                    <p><strong>Solution:</strong> “7-Day Free Pass” funnel with automated follow-up.</p>
-                    <p><strong>Result:</strong> 47 new sign-ups in 10 days, 68% conversion to paid plans.</p>
-                </div>
-                <div class="case-card">
-                    <h3>Home Services (Plumber, Electrician, etc.)</h3>
-                    <p>Gets sporadic calls but can’t predict income or fill slow weeks.</p>
-                    <p><strong>Solution:</strong> “Emergency Service Checklist” lead magnet + booking funnel.</p>
-                    <p><strong>Result:</strong> 22 qualified leads/week, booked 3 weeks out consistently.</p>
-                </div>
-            </div>
+            <!-- DOTS REMOVED HERE -->
         </div>
     </section>
     <!-- Godfather Offer Section -->
@@ -1087,59 +1030,40 @@
             <span class="close-modal">&times;</span>
             <h2 style="margin-bottom: 20px; text-align: center;">Book Your Free Strategy Call</h2>
             <p style="text-align: center; margin-bottom: 30px;">Enter your details below and we'll contact you to schedule your free consultation</p>
-            <form id="booking-form"
-                  action="https://docs.google.com/forms/d/e/1FAIpQLSfyAZ9ufadyxu9RWpShKNaVNx58MNFOyEiAvHM5-zzcaqyRRw/formResponse"
-                  method="POST">
+            <form id="booking-form">
                 <div class="form-group">
                     <label for="name">Full Name</label>
-                    <input type="text" name="entry.1202526384" id="name" class="form-control" required>
+                    <input type="text" id="name" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" name="entry.1527416134" id="email" class="form-control" required>
+                    <input type="email" id="email" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" name="entry.1384518915" id="phone" class="form-control" required>
+                    <input type="tel" id="phone" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="business">Business Type</label>
-                    <select name="entry.1419317400" id="business" class="form-control" required>
+                    <select id="business" class="form-control" required>
                         <option value="">Select your industry</option>
-                        <option value="Service Business">Service Business</option>
-                        <option value="E-commerce">E-commerce</option>
-                        <option value="Local Business">Local Business</option>
-                        <option value="SaaS/Tech">SaaS/Tech</option>
-                        <option value="Other">Other</option>
+                        <option value="service">Service Business</option>
+                        <option value="ecom">E-commerce</option>
+                        <option value="local">Local Business</option>
+                        <option value="saas">SaaS/Tech</option>
+                        <option value="other">Other</option>
                     </select>
                 </div>
                 <button type="submit" class="btn" style="width: 100%; padding: 18px; font-size: 1.1rem;">Book My Free Call</button>
             </form>
         </div>
     </div>
-
     <script>
-        // Video Player
-        document.addEventListener('DOMContentLoaded', function () {
-            const video = document.getElementById('promo-video');
-            const playOverlay = document.getElementById('play-overlay');
-            const loadingImg = document.querySelector('.video-wrapper .loading');
-
-            playOverlay.addEventListener('click', function () {
-                video.style.display = 'block';
-                loadingImg.style.display = 'none';
-                playOverlay.style.display = 'none';
-                video.play().catch(e => console.log('Autoplay prevented:', e));
-            });
-        });
-
-        // Countdown Timer (Fixed Deadline)
+        // Countdown Timer
         function updateTimer() {
             const now = new Date();
-            // 🔧 EDIT THIS LINE TO CHANGE DEADLINE
-            const endTime = new Date('October 26, 2025 23:59:59 UTC');
+            const endTime = new Date(now.getTime() + 48 * 60 * 60 * 1000); // 48 hours from now
             const timeLeft = endTime - now;
-
             if (timeLeft > 0) {
                 const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
                 const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
@@ -1151,9 +1075,9 @@
                 document.querySelector('.timer-box').innerHTML = '<h3 class="timer-title">OFFER HAS EXPIRED</h3>';
             }
         }
+        // Initialize timer
         setInterval(updateTimer, 1000);
         updateTimer();
-
         // Modal functionality
         const modal = document.getElementById('book-call');
         const closeBtn = document.querySelector('.close-modal');
@@ -1175,54 +1099,31 @@
                 document.body.style.overflow = 'auto';
             }
         });
-
-        // Google Forms Silent Submit
+        // Form validation
         const form = document.getElementById('booking-form');
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                // Reset borders
-                const inputs = form.querySelectorAll('input, select');
-                inputs.forEach(el => el.style.borderColor = '#d0d0e0');
-
-                // Validate
-                let valid = true;
-                inputs.forEach(el => {
-                    if (!el.value.trim()) {
-                        valid = false;
-                        el.style.borderColor = '#ff3860';
-                    }
-                });
-
-                if (!valid) {
-                    alert('Please fill in all required fields.');
-                    return;
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let isValid = true;
+            // Simple validation
+            const inputs = form.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                if (!input.value) {
+                    isValid = false;
+                    input.style.borderColor = '#ff3860';
+                } else {
+                    input.style.borderColor = '#d0d0e0';
                 }
-
-                const formData = new FormData(form);
-
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'no-cors'
-                })
-                .then(() => {
-                    document.querySelector('.modal-content').innerHTML = `
-                        <h2 style="text-align:center; margin-bottom:20px;">Thank You!</h2>
-                        <p style="text-align:center;">We’ll contact you within 24 hours to schedule your free strategy call.</p>
-                        <div style="text-align:center; margin-top:20px;">
-                            <button class="btn" onclick="document.getElementById('book-call').style.display='none'; document.body.style.overflow='auto';">Close</button>
-                        </div>
-                    `;
-                })
-                .catch(() => {
-                    alert('Submission failed. Please try again.');
-                });
             });
-        }
-
-        // Smooth scrolling
+            if (isValid) {
+                alert('Thank you! We will contact you shortly to schedule your call.');
+                form.reset();
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            } else {
+                alert('Please fill in all required fields.');
+            }
+        });
+        // Smooth scrolling for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             if (anchor.getAttribute('href') !== '#book-call') {
                 anchor.addEventListener('click', function(e) {
