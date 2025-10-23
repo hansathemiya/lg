@@ -155,16 +155,46 @@
             gap: 50px;
             align-items: center;
         }
-        .video-placeholder {
-            background: linear-gradient(135deg, var(--primary) 0%, #1e3a5f 100%);
+        .video-wrapper {
             border-radius: 10px;
-            height: 350px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(10, 37, 64, 0.2);
+            background: #000;
+            position: relative;
+            aspect-ratio: 16/9;
+            max-height: 350px;
+        }
+        .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+        .video-wrapper img.loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .play-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(10, 37, 64, 0.2);
+            cursor: pointer;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+        .play-overlay:hover {
+            opacity: 0.8;
         }
         .play-btn {
             width: 80px;
@@ -174,13 +204,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
             z-index: 2;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .play-btn:hover {
-            transform: scale(1.1);
         }
         .play-btn i {
             color: var(--primary);
@@ -531,7 +555,7 @@
         .ps-section .highlight {
             color: var(--secondary);
         }
-        /* MODAL - Glass Card Style */
+        /* MODAL - Glass Card Style (Visible Borders on All Devices) */
         .modal {
             display: none;
             position: fixed;
@@ -552,6 +576,7 @@
             box-shadow: 0 20px 40px rgba(10, 37, 64, 0.2);
             width: 100%;
             max-width: 500px;
+            min-width: 300px;
             padding: 40px;
             position: relative;
             animation: modalOpen 0.4s ease;
@@ -613,8 +638,12 @@
             .intrigue-grid {
                 grid-template-columns: 1fr;
             }
-            .video-placeholder {
+            .video-wrapper {
                 order: -1;
+            }
+            .modal-content {
+                padding: 30px 20px;
+                max-width: 90vw;
             }
         }
         @media (max-width: 768px) {
@@ -639,6 +668,7 @@
             }
             .modal-content {
                 padding: 30px 20px;
+                max-width: 90vw;
             }
         }
         @media (max-width: 576px) {
@@ -656,6 +686,11 @@
             }
             .price {
                 font-size: 2.5rem;
+            }
+            .modal-content {
+                padding: 25px 15px;
+                max-width: 90vw;
+                min-width: 280px;
             }
         }
     </style>
@@ -687,9 +722,13 @@
                         <a href="#solution" class="btn">See How It Works</a>
                     </div>
                 </div>
-                <div class="video-placeholder">
-                    <div class="play-btn">
-                        <i class="fas fa-play"></i>
+                <div class="video-wrapper">
+                    <img src="/loading.apng" alt="Loading" class="loading">
+                    <video id="promo-video" src="/vid.mp4" preload="metadata"></video>
+                    <div class="play-overlay" id="play-overlay">
+                        <div class="play-btn">
+                            <i class="fas fa-play"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1058,7 +1097,22 @@
             </form>
         </div>
     </div>
+
     <script>
+        // Video Player
+        document.addEventListener('DOMContentLoaded', function () {
+            const video = document.getElementById('promo-video');
+            const playOverlay = document.getElementById('play-overlay');
+            const loadingImg = document.querySelector('.video-wrapper .loading');
+
+            playOverlay.addEventListener('click', function () {
+                video.style.display = 'block';
+                loadingImg.style.display = 'none';
+                playOverlay.style.display = 'none';
+                video.play().catch(e => console.log('Autoplay prevented:', e));
+            });
+        });
+
         // Countdown Timer
         function updateTimer() {
             const now = new Date();
@@ -1075,9 +1129,9 @@
                 document.querySelector('.timer-box').innerHTML = '<h3 class="timer-title">OFFER HAS EXPIRED</h3>';
             }
         }
-        // Initialize timer
         setInterval(updateTimer, 1000);
         updateTimer();
+
         // Modal functionality
         const modal = document.getElementById('book-call');
         const closeBtn = document.querySelector('.close-modal');
@@ -1099,31 +1153,36 @@
                 document.body.style.overflow = 'auto';
             }
         });
+
         // Form validation
         const form = document.getElementById('booking-form');
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             let isValid = true;
-            // Simple validation
             const inputs = form.querySelectorAll('input, select');
             inputs.forEach(input => {
-                if (!input.value) {
+                if (!input.value.trim()) {
                     isValid = false;
                     input.style.borderColor = '#ff3860';
                 } else {
                     input.style.borderColor = '#d0d0e0';
                 }
             });
-            if (isValid) {
-                alert('Thank you! We will contact you shortly to schedule your call.');
-                form.reset();
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            } else {
+            if (!isValid) {
                 alert('Please fill in all required fields.');
+                return;
             }
+            // Simulate success
+            document.querySelector('.modal-content').innerHTML = `
+                <h2 style="text-align:center; margin-bottom:20px;">Thank You!</h2>
+                <p style="text-align:center;">We’ll contact you within 24 hours to schedule your free strategy call.</p>
+                <div style="text-align:center; margin-top:20px;">
+                    <button class="btn" onclick="document.getElementById('book-call').style.display='none'; document.body.style.overflow='auto';">Close</button>
+                </div>
+            `;
         });
-        // Smooth scrolling for navigation
+
+        // Smooth scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             if (anchor.getAttribute('href') !== '#book-call') {
                 anchor.addEventListener('click', function(e) {
